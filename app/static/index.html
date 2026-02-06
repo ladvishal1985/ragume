@@ -5,7 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ragume - AI Portfolio</title>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">\n
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <style>
         :root {
             --primary-color: #6366f1;
@@ -121,6 +122,7 @@
             margin: 0 0 4px 0;
             background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
             -webkit-background-clip: text;
+            background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
@@ -226,6 +228,7 @@
             display: flex;
             flex-direction: column;
             gap: 16px;
+            scroll-behavior: smooth;
         }
 
         .message {
@@ -315,12 +318,39 @@
             background: rgba(255, 255, 255, 0.1);
             border-radius: 4px;
         }
+
+        .sample-questions {
+            width: 100%;
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .sample-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #ccc;
+            padding: 8px 12px;
+            text-align: left;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            width: 100%;
+        }
+
+        .sample-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--primary-color);
+            color: white;
+        }
     </style>
 </head>
 
 <body>
     <div class="vibe-banner">
-        ⚠️ Warning: This application was purely vibe-coded. Hilarity may ensue. ⚠️
+        ✨ Pure Vibe Coding in Action: A RAG-Based AI Experiment for Learning & Discovery 🚀
     </div>
     <div class="container">
         <!-- Sidebar -->
@@ -335,6 +365,16 @@
             <div class="social-links">
                 <a href="#" target="_blank" class="social-btn">LinkedIn</a>
                 <a href="#" target="_blank" class="social-btn">Resume</a>
+            </div>
+
+            <div class="sample-questions">
+                <p class="subtitle" style="margin-bottom: 10px; margin-top: 20px;">Try asking:</p>
+                <button class="sample-btn" onclick="askQuestion('What are your top skills?')">What are your top
+                    skills?</button>
+                <button class="sample-btn" onclick="askQuestion('Tell me about your recent projects.')">Tell me about
+                    your recent projects.</button>
+                <button class="sample-btn" onclick="askQuestion('What is your experience with AI?')">What is your
+                    experience with AI?</button>
             </div>
         </div>
 
@@ -367,7 +407,13 @@
             const div = document.createElement('div');
             div.classList.add('message', sender);
 
-            let contentHtml = `<p style="margin:0">${text}</p>`;
+            let contentHtml = '';
+            if (sender === 'bot') {
+                // Use marked to parse the markdown
+                contentHtml = marked.parse(text);
+            } else {
+                contentHtml = `<p style="margin:0">${text}</p>`;
+            }
 
             // Add subtle lightning bolt for cache
             if (source === 'cache') {
@@ -387,10 +433,10 @@
             appendMessage(message, 'user');
             userInput.value = '';
 
-            // Show typing indicator (optional hook)
+            // Show typing indicator
             const typingDiv = document.createElement('div');
             typingDiv.classList.add('message', 'bot');
-            typingDiv.textContent = 'Typing...';
+            typingDiv.textContent = '...';
             chatMessages.appendChild(typingDiv);
 
             try {
@@ -402,18 +448,50 @@
                     body: JSON.stringify({ message: message })
                 });
 
-                typingDiv.remove();
-
                 if (response.ok) {
-                    const data = await response.json();
-                    appendMessage(data.response, 'bot', data.source);
+                    // Remove initial "..." placeholder
+                    typingDiv.textContent = '';
+
+                    const reader = response.body.getReader();
+                    const decoder = new TextDecoder();
+
+                    let streamBuffer = '';
+                    let displayedText = '';
+                    let isStreamDone = false;
+
+                    // 1. Consumer: Process the stream in background
+                    (async () => {
+                        while (true) {
+                            const { done, value } = await reader.read();
+                            if (done) {
+                                isStreamDone = true;
+                                break;
+                            }
+                            streamBuffer += decoder.decode(value);
+                        }
+                    })();
+
+                    // 2. Renderer: Smooth interval update (20ms)
+                    const typeInterval = setInterval(() => {
+                        if (displayedText.length < streamBuffer.length) {
+                            // Add 2 chars per tick for nice speed
+                            const chunk = streamBuffer.slice(displayedText.length, displayedText.length + 2);
+                            displayedText += chunk;
+                            typingDiv.innerHTML = marked.parse(displayedText);
+                            chatMessages.scrollTop = chatMessages.scrollHeight;
+                        } else if (isStreamDone) {
+                            clearInterval(typeInterval);
+                        }
+                    }, 20);
+
                 } else {
+                    typingDiv.remove();
                     appendMessage("Sorry, I encountered an error connecting to the agent.", 'bot');
                 }
             } catch (error) {
                 typingDiv.remove();
                 console.error('Error:', error);
-                appendMessage("Network error. Please try again.", 'bot');
+                appendMessage(`Network error: ${error.message} (Check console for details)`, 'bot');
             }
         }
 
@@ -439,6 +517,11 @@
                 console.error('Error fetching summary:', error);
                 summaryDiv.textContent = "Welcome to my portfolio! Ask me anything about my experience.";
             }
+        }
+
+        function askQuestion(question) {
+            userInput.value = question;
+            sendMessage();
         }
 
         // Load summary on page load

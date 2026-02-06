@@ -67,15 +67,25 @@ if prompt := st.chat_input("How can I help you?"):
             full_api_url = f"{full_api_url.rstrip('/')}/agent"
 
         try:
+            # Stream the response
             response = requests.post(
                 full_api_url, 
-                json={"message": prompt}
+                json={"message": prompt},
+                stream=True 
             )
             
             if response.status_code == 200:
-                answer = response.json().get("response", "No response from agent.")
-                message_placeholder.markdown(answer)
-                st.session_state.messages.append({"role": "assistant", "content": answer})
+                # Generator function to yield chunks
+                def stream_generator():
+                    for chunk in response.iter_content(chunk_size=None):
+                        if chunk:
+                            yield chunk.decode('utf-8')
+
+                # Use st.write_stream to display with typewriter effect
+                full_response = st.write_stream(stream_generator())
+                
+                # Append full response to history for persistence
+                st.session_state.messages.append({"role": "assistant", "content": full_response})
             else:
                 error_msg = f"Error {response.status_code}: {response.text}"
                 message_placeholder.error(error_msg)

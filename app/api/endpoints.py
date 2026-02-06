@@ -1,6 +1,7 @@
 
 import os
 from fastapi import APIRouter, HTTPException, Request
+from fastapi.responses import StreamingResponse
 from langchain_community.document_loaders import PyPDFLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
@@ -16,23 +17,43 @@ router = APIRouter()
 @limiter.limit("10/minute")
 async def run_agent(request: Request, input_data: AgentInput):
     """
-    Runs the RAG agent to answer a question.
+    Runs the RAG agent to answer a question with streaming.
     Rate Limit: 10 requests per minute.
     """
     # 1. Semantic Cache Check
     cached_answer = await semantic_cache.search(input_data.message)
     if cached_answer:
-        return {"response": cached_answer, "source": "cache"}
+        # Return as a simple stream for consistency
+        async def mock_stream():
+            yield cached_answer
+        return StreamingResponse(mock_stream(), media_type="text/plain")
 
-    # 2. Run Agent
-    initial_state = {"question": input_data.message, "context": [], "answer": ""}
-    final_state = await app_graph.ainvoke(initial_state)
-    answer = final_state["answer"]
-    
-    # 3. Save to Cache (Async background task would be better, but direct await is fine for now)
-    await semantic_cache.add(input_data.message, answer)
-    
-    return {"response": answer, "source": "live"}
+    # 2. Run Agent with Streaming
+    async def event_generator():
+        full_answer = ""
+        initial_state = {"question": input_data.message, "context": [], "answer": ""}
+        
+        try:
+            # Stream tokens from the graph
+            async for event in app_graph.astream_events(initial_state, version="v1"):
+                kind = event["event"]
+                
+                # Check for LLM stream events
+                if kind == "on_chat_model_stream":
+                    content = event["data"]["chunk"].content
+                    if content:
+                        full_answer += content
+                        yield content
+                        
+            # 3. Save to Cache (After stream completes)
+            if full_answer:
+                await semantic_cache.add(input_data.message, full_answer)
+                
+        except Exception as e:
+            print(f"Streaming error: {e}")
+            yield f"Error: {str(e)}"
+
+    return StreamingResponse(event_generator(), media_type="text/plain")
 
 @router.post("/ingest")
 @limiter.limit("5/minute")

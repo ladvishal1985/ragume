@@ -98,8 +98,10 @@ The backend provides the following endpoints:
     -   **Response**: `{"response": "...", "source": "live/cache"}`
 
 -   **`POST /ingest`**
-    -   **Description**: Ingests a PDF file into the vector store.
-    -   **Input**: JSON body with `file_path` (string).
+    -   **Description**: Ingests one or more PDF files into the vector store.
+    -   **Input**: JSON body with `file_path` (string) OR `directories` (list of strings).
+        -   `file_path`: Path to a single PDF file.
+        -   `directories`: List of directory paths to recursively scan for PDF files.
     -   **Rate Limit**: 5 requests/minute.
 
 -   **`GET /summary`**

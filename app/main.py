@@ -32,6 +32,11 @@ app.add_middleware(
 static_dir = os.path.join(os.path.dirname(__file__), "static")
 app.mount("/static", StaticFiles(directory=static_dir), name="static")
 
+# Mount data directory for file access (e.g. Resume)
+data_dir = os.path.join(os.path.dirname(__file__), "..", "data")
+if os.path.exists(data_dir):
+    app.mount("/files", StaticFiles(directory=data_dir), name="files")
+
 app.include_router(api_router)
 
 @app.get("/")

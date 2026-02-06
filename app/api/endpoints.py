@@ -63,49 +63,60 @@ async def ingest_document(request: Request, input_data: IngestInput):
     Rate Limit: 5 requests per minute.
     """
     file_path = input_data.file_path
-    if not os.path.exists(file_path):
-        raise HTTPException(status_code=404, detail="File not found")
+    directories = input_data.directories
+    
+    pdf_files = []
+    
+    # 1. Collect files from direct path
+    if file_path and os.path.exists(file_path):
+        pdf_files.append(file_path)
+        
+    # 2. Collect files from directories
+    for directory in directories:
+        if os.path.exists(directory):
+            for root, _, files in os.walk(directory):
+                for file in files:
+                    if file.lower().endswith(".pdf"):
+                        pdf_files.append(os.path.join(root, file))
+    
+    if not pdf_files:
+        raise HTTPException(status_code=404, detail="No PDF files found in provided paths")
         
     try:
-        loader = PyPDFLoader(file_path)
-        docs = loader.load()
+        all_splits = []
         
-        text_splitters = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=50)
-        splits = text_splitters.split_documents(docs)
-        
-        # Ensure all schema fields are present to prevent DataNotMatchException
-        for split in splits:
-            # Strings (Type 21)
-            split.metadata.setdefault("producer", "")
-            split.metadata.setdefault("creator", "")
-            split.metadata.setdefault("creationdate", "")
-            split.metadata.setdefault("author", "")
-            split.metadata.setdefault("keywords", "portfolio")
-            split.metadata.setdefault("moddate", "")
-            split.metadata.setdefault("subject", "history")
-            split.metadata.setdefault("title", "")
-            split.metadata.setdefault("trapped", "")
-            split.metadata.setdefault("source", file_path) # PyPDF usually sets this
-            split.metadata.setdefault("page_label", "")
+        for pdf_path in pdf_files:
+            loader = PyPDFLoader(pdf_path)
+            docs = loader.load()
             
-            # Ints (Type 5)
-            split.metadata.setdefault("total_pages", 0)
-            split.metadata.setdefault("page", 0) # PyPDF usually sets this
+            text_splitters = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=50)
+            splits = text_splitters.split_documents(docs)
+            
+            # Ensure metadata
+            for split in splits:
+                split.metadata.setdefault("keywords", "portfolio")
+                split.metadata.setdefault("source", pdf_path)
+                # ... (keep other defaults if strict schema needed, relying on Milvus auto-fill / None otherwise if flexible)
+                # Minimal defaults to ensure insertion
+                for field in ["producer", "creator", "creationdate", "author", "moddate", "subject", "title", "trapped", "page_label"]:
+                    split.metadata.setdefault(field, "")
+                split.metadata.setdefault("total_pages", 0)
+                split.metadata.setdefault("page", 0)
+
+            all_splits.extend(splits)
         
         vector_store = get_vector_store()
         if not vector_store:
              raise HTTPException(status_code=500, detail="Vector store not configured")
-             
-        # Add documents - Milvus wrapper handles async internal checks usually, but add_documents is sync in base class
-        # However, for consistency and thread pool avoidance, we wrap it or just leave it if it's sync.
-        # But 'run_agent' definitely needs to be async.
-        # Let's make this async too for standard practices, although strictly add_documents might be sync blocking.
-        # If add_documents is blocking, we might want to run it in a threadpool to avoid blocking the event loop.
-        # LangChain's add_documents is often sync. Let's keep it simple for now, as the main issue was the Agent loop check.
-        # We'll just mark the endpoint as async to satisfy FastAPI's loop requirements for other things.
         
-        vector_store.add_documents(splits)
-        return {"message": f"Successfully ingested {len(splits)} chunks from {file_path}"}
+        if all_splits:
+            vector_store.add_documents(all_splits)
+            
+        return {
+            "message": f"Successfully processed {len(pdf_files)} files.",
+            "total_chunks": len(all_splits),
+            "files": pdf_files
+        }
         
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

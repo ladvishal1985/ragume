@@ -8,7 +8,7 @@ start "Ragume Backend" cmd /k "venv\Scripts\activate && uvicorn app.main:app --r
 timeout /t 5 /nobreak >nul
 
 :: Start Frontend in a new window
-start "Ragume Frontend" cmd /k "venv\Scripts\activate && streamlit run ui.py"
+start "Ragume Frontend" cmd /k "venv\Scripts\activate && python -m streamlit run ui.py"
 
 echo.
 echo Application started!

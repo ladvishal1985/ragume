@@ -1,3 +1,4 @@
+import os
 import streamlit as st
 import requests
 import asyncio
@@ -51,15 +52,23 @@ if prompt := st.chat_input("How can I help you?"):
         st.markdown(prompt)
 
     # API Call
-    api_url = "http://127.0.0.1:8000/agent"
+    # Allow configuring API URL via env var, default to port 8001 since 8000 is often reserved/blocked
+    # NOTE: When deploying, ensure API_URL includes the full path e.g. https://.../agent
+    api_url = os.getenv("API_URL", "http://127.0.0.1:8001/agent")
     
     with st.chat_message("assistant"):
         message_placeholder = st.empty()
         message_placeholder.markdown("Thinking...")
         
+        # Ensure the API URL ends with /agent for the POST request
+        # This handles cases where Render sets the base URL automatically
+        full_api_url = api_url
+        if not full_api_url.endswith("/agent"):
+            full_api_url = f"{full_api_url.rstrip('/')}/agent"
+
         try:
             response = requests.post(
-                api_url, 
+                full_api_url, 
                 json={"message": prompt}
             )
             
@@ -72,4 +81,4 @@ if prompt := st.chat_input("How can I help you?"):
                 message_placeholder.error(error_msg)
                 
         except requests.exceptions.ConnectionError:
-            message_placeholder.error("❌ Could not connect to the Agent API. Is the server running on port 8000?")
+            message_placeholder.error("❌ Could not connect to the Agent API. Is the server running on port 8001?")

@@ -28,6 +28,8 @@ It's recommended to use a virtual environment to manage dependencies.
 # Windows
 python -m venv venv
 venv\Scripts\activate
+# If using Git Bash on Windows:
+# source venv/Scripts/activate
 
 # Mac/Linux
 python3 -m venv venv
@@ -47,9 +49,9 @@ Create a `.env` file in the root directory and add your necessary API keys and c
 ### Backend (FastAPI)
 Start the FastAPI server:
 ```bash
-uvicorn app.main:app --reload
+uvicorn app.main:app --reload --port 8001
 ```
-The API will be available at `http://localhost:8000`.
+The API will be available at `http://localhost:8001`.
 
 ### Frontend (Streamlit)
 In a separate terminal, start the Streamlit UI:
@@ -57,6 +59,31 @@ In a separate terminal, start the Streamlit UI:
 streamlit run ui.py
 ```
 The UI will open in your browser at `http://localhost:8501`.
+## 🚀 Quick Start (Single Command)
+
+You can run both the Backend and Frontend with a single command:
+
+**Windows (CMD/PowerShell):**
+```cmd
+run.bat
+```
+
+**Bash (Linux/Mac/Git Bash):**
+```bash
+sh run.sh
+```
+
+## ☁️ Deployment on Render
+
+This project includes a `render.yaml` for easy deployment on [Render](https://render.com).
+
+1.  Push your code to a GitHub repository.
+2.  Go to Render and create a new **Blueprint Instance**.
+3.  Connect your repository.
+4.  Render will automatically detect the `render.yaml` and create two services:
+    -   `ragume-backend` (FastAPI)
+    -   `ragume-frontend` (Streamlit)
+5.  **Done!** Render will automatically deploy your services. The frontend will automatically connect to the backend.
 
 ## 🔌 API Endpoints
 
@@ -90,5 +117,6 @@ The backend provides the following endpoints:
 
 ## 🧪 Helper Scripts
 
--   `vpython.bat`: A wrapper script to run Python commands within the virtual environment (Windows only).
-    -   Example: `vpython.bat run_script.py`
+-   `vpython.bat` / `vpython.sh`: Wrapper scripts to run Python commands within the virtual environment (Windows/Unix).
+    -   Example (Windows CMD): `vpython.bat run_script.py`
+    -   Example (Bash): `sh vpython.sh run_script.py`

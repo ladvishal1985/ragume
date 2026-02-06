@@ -6,6 +6,7 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 
 from app.api.schemas import AgentInput, IngestInput
 from app.graph.nodes import get_vector_store
+from app.graph.workflow import app_graph
 from app.core.limiter import limiter
 from app.core.semantic_cache import semantic_cache
 

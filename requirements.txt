@@ -1,0 +1,12 @@
+fastapi
+uvicorn
+langgraph
+langchain-core
+langchain-openai
+langchain-milvus
+langchain-community
+pypdf
+python-dotenv
+requests
+aiofiles
+slowapi

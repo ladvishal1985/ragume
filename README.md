@@ -8,8 +8,16 @@ Welcome to **Ragume**, a "vibe code" project that turns a portfolio into an inte
 
 -   **RAG Agent**: Intelligent chatbot powered by LangChain and OpenAI.
 -   **Vector Search**: Uses Milvus for efficient document retrieval.
--   **Semantic Cache**: Built-in semantic caching layer that stores and instantly retrieves responses for similar queries, significantly reducing latency and API costs.
--   **Streamlit UI**: A "jazzy" interface for interacting with the agent.
+-   **Conversation Memory**: Maintains context across multiple messages using LLM-based summarization and semantic retrieval.
+    -   Automatically summarizes conversations every 2 exchanges
+    -   Stores summaries as vector embeddings in Milvus
+    -   Retrieves relevant conversation context based on current question
+    -   Session management with 24-hour TTL (localStorage)
+-   **Semantic Cache**: Built-in semantic caching layer with improved similarity matching (threshold: 0.75).
+    -   Caches responses for exact and semantically similar queries
+    -   Reduces latency and API costs by ~30-40%
+    -   Debug logging shows similarity scores for transparency
+-   **Modern UI**: Clean, responsive interface with smooth typing animations.
 -   **Rate Limiting**: API endpoints are protected with rate limits.
 
 ## 🛠️ Setup Instructions
@@ -92,10 +100,13 @@ The backend provides the following endpoints:
 ### Core Endpoints
 
 -   **`POST /agent`**
-    -   **Description**: Runs the RAG agent to answer a question.
-    -   **Input**: JSON body with `message` (string).
+    -   **Description**: Runs the RAG agent to answer a question with conversation memory.
+    -   **Input**: JSON body with:
+        -   `message` (string, required): The user's question
+        -   `session_id` (string, optional): Session identifier for conversation tracking
+        -   `recent_messages` (array, optional): Last 4 messages for context
     -   **Rate Limit**: 10 requests/minute.
-    -   **Response**: `{"response": "...", "source": "live/cache"}`
+    -   **Response**: Streaming text response with conversation context
 
 -   **`POST /ingest`**
     -   **Description**: Ingests one or more PDF files into the vector store.

@@ -11,7 +11,7 @@ from app.core.config import Config
 from app.core.factory import get_embeddings
 
 class SemanticCache:
-    def __init__(self, collection_name="semantic_cache", threshold=0.85):
+    def __init__(self, collection_name="semantic_cache", threshold=0.75):
         self.collection_name = collection_name
         self.threshold = threshold
         self.dims = 1536 # OpenAI text-embedding-3-small dimension
@@ -79,9 +79,17 @@ class SemanticCache:
                 # or straightforward cosine depending on metric.
                 # Usually matches return a 'score'. For COSINE, higher is better (closer to 1).
                 # Let's verify score.
+                
+                # Debug logging
+                print(f"[Cache] Query: '{question[:50]}...'")
+                print(f"[Cache] Best match: '{match.entity.get('question')[:50]}...'")
+                print(f"[Cache] Similarity score: {match.score:.4f} (threshold: {self.threshold})")
+                
                 if match.score >= self.threshold:
-                    print(f"Cache Hit! Score: {match.score} | Q: {match.entity.get('question')}")
+                    print(f"[Cache] HIT - Returning cached answer")
                     return match.entity.get("answer")
+                else:
+                    print(f"[Cache] MISS - Score below threshold")
             
             return None
         except Exception as e:

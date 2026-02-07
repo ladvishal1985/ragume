@@ -289,6 +289,60 @@
             box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
         }
 
+        /* Typing Indicator */
+        .typing-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 14px 18px;
+        }
+
+        .typing-indicator span {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #94a3b8;
+            animation: typingBounce 1.4s infinite ease-in-out;
+        }
+
+        .typing-indicator span:nth-child(1) {
+            animation-delay: 0s;
+        }
+
+        .typing-indicator span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-indicator span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes typingBounce {
+
+            0%,
+            60%,
+            100% {
+                transform: translateY(0);
+                opacity: 0.7;
+            }
+
+            30% {
+                transform: translateY(-10px);
+                opacity: 1;
+            }
+        }
+
+        /* Smooth text reveal animation */
+        @keyframes textReveal {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
         .input-area {
             padding: 24px;
             border-top: 1px solid rgba(255, 255, 255, 0.05);
@@ -540,6 +594,34 @@
         const chatMessages = document.getElementById('chat-messages');
         const userInput = document.getElementById('user-input');
 
+        // Session Management with localStorage
+        const SESSION_TTL = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
+
+        function getOrCreateSessionId() {
+            let sessionId = localStorage.getItem('ragume_session_id');
+            let sessionExpiry = localStorage.getItem('ragume_session_expiry');
+
+            // Check if session exists and hasn't expired
+            if (sessionId && sessionExpiry && Date.now() < parseInt(sessionExpiry)) {
+                console.log(`Using existing session: ${sessionId}`);
+                return sessionId;
+            }
+
+            // Create new session (expired or doesn't exist)
+            sessionId = 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+            const expiryTime = Date.now() + SESSION_TTL;
+
+            localStorage.setItem('ragume_session_id', sessionId);
+            localStorage.setItem('ragume_session_expiry', expiryTime.toString());
+
+            console.log(`Created new session: ${sessionId} (expires in 24h)`);
+            return sessionId;
+        }
+
+        // Initialize session and message tracking
+        let sessionId = getOrCreateSessionId();
+        let recentMessages = [];  // Track last 4 messages for summarization
+
         function appendMessage(text, sender, source = null) {
             const div = document.createElement('div');
             div.classList.add('message', sender);
@@ -566,15 +648,23 @@
             const message = userInput.value.trim();
             if (!message) return;
 
-            // Add user message
+            // Add user message to UI and recent messages
             appendMessage(message, 'user');
+            recentMessages.push({ role: "user", content: message });
+
+            // Keep only last 4 messages
+            if (recentMessages.length > 4) {
+                recentMessages = recentMessages.slice(-4);
+            }
+
             userInput.value = '';
 
-            // Show typing indicator
+            // Show animated typing indicator
             const typingDiv = document.createElement('div');
             typingDiv.classList.add('message', 'bot');
-            typingDiv.textContent = '...';
+            typingDiv.innerHTML = '<div class="typing-indicator"><span></span><span></span><span></span></div>';
             chatMessages.appendChild(typingDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
 
             try {
                 const response = await fetch('/agent', {
@@ -582,19 +672,21 @@
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ message: message })
+                    body: JSON.stringify({
+                        message: message,
+                        session_id: sessionId,
+                        recent_messages: recentMessages
+                    })
                 });
 
                 if (response.ok) {
-                    // Remove initial "..." placeholder
-                    typingDiv.textContent = '';
-
                     const reader = response.body.getReader();
                     const decoder = new TextDecoder();
 
                     let streamBuffer = '';
                     let displayedText = '';
                     let isStreamDone = false;
+                    let hasStartedTyping = false;
 
                     // 1. Consumer: Process the stream in background
                     (async () => {
@@ -611,13 +703,26 @@
                     // 2. Renderer: Smooth interval update (20ms)
                     const typeInterval = setInterval(() => {
                         if (displayedText.length < streamBuffer.length) {
+                            // Replace typing indicator with actual content on first character
+                            if (!hasStartedTyping) {
+                                typingDiv.innerHTML = '';
+                                hasStartedTyping = true;
+                            }
+
                             // Add 2 chars per tick for nice speed
                             const chunk = streamBuffer.slice(displayedText.length, displayedText.length + 2);
                             displayedText += chunk;
                             typingDiv.innerHTML = marked.parse(displayedText);
+                            typingDiv.style.animation = 'textReveal 0.2s ease';
                             chatMessages.scrollTop = chatMessages.scrollHeight;
                         } else if (isStreamDone) {
                             clearInterval(typeInterval);
+
+                            // Add assistant response to recent messages
+                            recentMessages.push({ role: "assistant", content: streamBuffer });
+                            if (recentMessages.length > 4) {
+                                recentMessages = recentMessages.slice(-4);
+                            }
                         }
                     }, 20);
 

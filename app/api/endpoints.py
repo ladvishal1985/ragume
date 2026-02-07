@@ -17,9 +17,15 @@ router = APIRouter()
 @limiter.limit("10/minute")
 async def run_agent(request: Request, input_data: AgentInput):
     """
-    Runs the RAG agent to answer a question with streaming.
+    Runs the RAG agent to answer a question with streaming and conversation memory.
     Rate Limit: 10 requests per minute.
     """
+    import uuid
+    from app.core.conversation_memory import conversation_memory
+    
+    # Generate session ID if not provided
+    session_id = input_data.session_id or str(uuid.uuid4())
+    
     # 1. Semantic Cache Check
     cached_answer = await semantic_cache.search(input_data.message)
     if cached_answer:
@@ -28,10 +34,24 @@ async def run_agent(request: Request, input_data: AgentInput):
             yield cached_answer
         return StreamingResponse(mock_stream(), media_type="text/plain")
 
-    # 2. Run Agent with Streaming
+    # 2. Retrieve conversation context from Milvus
+    conversation_context = await conversation_memory.retrieve_relevant_context(
+        query=input_data.message,
+        session_id=session_id,
+        k=3
+    )
+
+    # 3. Run Agent with Streaming
     async def event_generator():
         full_answer = ""
-        initial_state = {"question": input_data.message, "context": [], "answer": ""}
+        initial_state = {
+            "question": input_data.message,
+            "context": [],
+            "answer": "",
+            "session_id": session_id,
+            "conversation_context": conversation_context,
+            "recent_messages": input_data.recent_messages or []
+        }
         
         try:
             # Stream tokens from the graph
@@ -45,9 +65,17 @@ async def run_agent(request: Request, input_data: AgentInput):
                         full_answer += content
                         yield content
                         
-            # 3. Save to Cache (After stream completes)
+            # 4. Save to Cache (After stream completes)
             if full_answer:
                 await semantic_cache.add(input_data.message, full_answer)
+                
+            # 5. Store conversation summary if we have enough messages
+            recent_messages = input_data.recent_messages or []
+            if len(recent_messages) >= 4:  # Every 2 exchanges (4 messages)
+                await conversation_memory.store_summary(
+                    session_id=session_id,
+                    messages=recent_messages
+                )
                 
         except Exception as e:
             print(f"Streaming error: {e}")

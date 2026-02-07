@@ -37,32 +37,52 @@ async def retrieve(state: State):
     return {"context": docs}
 
 async def generate(state: State):
-    """Generates an answer using the LLM and retrieved context."""
+    """Generates an answer using the LLM, retrieved context, and conversation history."""
     print("Generating answer...")
     llm = get_llm()
     
     template = """You are a professional, friendly, and helpful AI assistant representing the portfolio owner.
-Your goal is to answer questions about the owner's skills, experience, and projects based ONLY on the provided context.
+Your goal is to answer questions about the owner's skills, experience, and projects based on the provided context.
+
+{conversation_context_section}
 
 Rules:
 1. Answer in the first person (e.g., "I have experience in...", "My project involves...").
 2. Be concise but comprehensive. Prioritize specific details like technologies used, dates, and outcomes.
 3. If the answer is not in the context, politely say you don't have that information. Do NOT hallucinate.
 4. Maintain a professional and engaging tone.
+5. Use the conversation history to understand follow-up questions and maintain context.
 
-Context:
+Portfolio Context:
 {context}
 
-Question: {question}
+Current Question: {question}
 """
     prompt = ChatPromptTemplate.from_template(template)
     
     # Helper to format docs
     def format_docs(docs):
+        if not docs:
+            return "No relevant portfolio information found."
         return "\n\n".join(doc.page_content for doc in docs)
     
+    # Helper to format conversation context
+    def format_conversation_context(docs):
+        if not docs:
+            return ""
+        formatted = "Relevant Conversation History:\n"
+        for doc in docs:
+            formatted += f"- {doc.page_content}\n"
+        return formatted + "\n"
+    
     chain = (
-        {"context": lambda x: format_docs(state["context"]), "question": lambda x: state["question"]}
+        {
+            "context": lambda x: format_docs(state["context"]),
+            "question": lambda x: state["question"],
+            "conversation_context_section": lambda x: format_conversation_context(
+                state.get("conversation_context", [])
+            )
+        }
         | prompt
         | llm
         | StrOutputParser()

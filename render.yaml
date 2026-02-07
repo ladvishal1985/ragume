@@ -1,7 +1,7 @@
 services:
-  # Backend Service
+  # Single Service: Backend serves both API and Frontend
   - type: web
-    name: ragume-backend
+    name: ragume
     env: python
     buildCommand: pip install -r requirements.txt
     startCommand: python -m uvicorn app.main:app --host 0.0.0.0 --port $PORT
@@ -14,29 +14,3 @@ services:
         sync: false
       - key: MILVUS_TOKEN
         sync: false
-
-  # Frontend Service
-  - type: web
-    name: ragume-frontend
-    env: python
-    buildCommand: pip install -r requirements.txt
-    startCommand: python -m streamlit run ui.py --server.port $PORT --server.address 0.0.0.0
-    envVars:
-      - key: PYTHON_VERSION
-        value: 3.10.0
-      - key: API_URL
-        fromService:
-          type: web
-          name: ragume-backend
-          property: url
-        # Detailed Config: Appends /agent to the base URL in the code if needed, 
-        # but the code currently expects full URL or base? 
-        # ui.py: api_url = os.getenv("API_URL", "http://127.0.0.1:8001/agent")
-        # So we likely need the full URL including /agent path.
-        # Render provides base URL e.g. https://backend.onrender.com
-        # So we'll need to append /agent in the UI code or here.
-        # Since I can't easily append string in render.yaml value, I should update ui.py 
-        # to handle base URL or ensure the user knows to add /agent if they set it manually.
-        # BETTER: Let's make ui.py smarter to append /agent if missing? 
-        # Or just trust the user to set it?
-        # For this file, `property: url` gives the root.

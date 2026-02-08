@@ -1,0 +1,66 @@
+{
+  "timestamp": "2026-02-08T16:48:58.985484",
+  "total_questions": 10,
+  "results": [
+    {
+      "question": "What is your Python experience?",
+      "ground_truth": "I have over 5 years of Python experience, specializing in FastAPI and Django for web development.",
+      "rag_answer": "I have advanced experience in Python, utilizing it extensively for data science projects, model deployment, and automation pipelines, particularly within Dataiku.",
+      "match": "OK"
+    },
+    {
+      "question": "What databases do you know?",
+      "ground_truth": "I primarily use Milvus for vector storage and semantic search in my RAG chatbot projects.",
+      "rag_answer": "I have experience with Milvus, Pinecone, PGVector, and MongoAtlas.",
+      "match": "OK"
+    },
+    {
+      "question": "Do you have React experience?",
+      "ground_truth": "No, I don't have React experience listed in my portfolio.",
+      "rag_answer": "Yes, I have extensive experience with React, particularly as a Front-End Technical Architect where I led the migration strategy to Redux + Webpack, improving maintainability and release cadence.",
+      "match": "OK"
+    },
+    {
+      "question": "What Python projects have you built and how did you deploy them?",
+      "ground_truth": "I built Ragume, a RAG chatbot using FastAPI and LangChain, which I deployed on Render.",
+      "rag_answer": "I have built several Python projects utilizing frameworks like PyTorch, Scikit-learn, and Pandas for data processing and machine learning. I deployed these projects using CI/CD pipelines in Azure DevOps, ensuring smooth transitions across development, QA, and production environments.",
+      "match": "OK"
+    },
+    {
+      "question": "Tell me about your experience with APIs and FastAPI",
+      "ground_truth": "I have extensive experience with APIs and FastAPI, including building the production backend for my Ragume chatbot.",
+      "rag_answer": "I have experience in API design and development, particularly with Node.js and Java Spring Boot. However, I don't have specific information about my experience with FastAPI.",
+      "match": "OK"
+    },
+    {
+      "question": "How did you implement conversation memory in your chatbot?",
+      "ground_truth": "I implemented conversation memory using semantic retrieval of lesson summaries stored in Milvus.",
+      "rag_answer": "I developed a dedicated conversation history backend to persist context, attachments, and response lineage, which allows the chatbot to maintain conversational context and support multi-step reasoning effectively.",
+      "match": "OK"
+    },
+    {
+      "question": "What vector database did you use and why?",
+      "ground_truth": "I use Milvus as my vector database for its efficient semantic search and seamless integration with LangChain.",
+      "rag_answer": "I used Milvus VectorDB because it allows for consistent, compliant, and context-driven vector searches while aligning with OSDU data governance principles. Its capabilities in managing vector data and supporting efficient Approximate Nearest Neighbor (ANN) search were crucial for my projects.",
+      "match": "OK"
+    },
+    {
+      "question": "How does your semantic cache work?",
+      "ground_truth": "My semantic cache uses Milvus to store and retrieve previously generated answers based on query similarity.",
+      "rag_answer": "I don't have information on how my semantic cache works.",
+      "match": "OK"
+    },
+    {
+      "question": "What is your experience with machine learning?",
+      "ground_truth": "I don't have direct machine learning experience, though I utilize LLMs through APIs for my RAG projects.",
+      "rag_answer": "I have experience in various machine learning algorithms, including regression (like linear and decision trees) and clustering (such as K-means). I also focus on model evaluation metrics and hyperparameter tuning to optimize performance.",
+      "match": "OK"
+    },
+    {
+      "question": "Tell me about your mobile app development experience",
+      "ground_truth": "I do not have mobile app development experience in my portfolio.",
+      "rag_answer": "I have experience in mobile app development using PhoneGap, where I acted as the Lead Developer/UI Architect for complex Single Page Applications. My work involved providing solutions for web and mobile applications, ensuring a seamless user experience.",
+      "match": "OK"
+    }
+  ]
+}

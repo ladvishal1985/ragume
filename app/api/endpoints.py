@@ -26,13 +26,14 @@ async def run_agent(request: Request, input_data: AgentInput):
     # Generate session ID if not provided
     session_id = input_data.session_id or str(uuid.uuid4())
     
-    # 1. Semantic Cache Check
-    cached_answer = await semantic_cache.search(input_data.message)
-    if cached_answer:
-        # Return as a simple stream for consistency
-        async def mock_stream():
-            yield cached_answer
-        return StreamingResponse(mock_stream(), media_type="text/plain")
+    # 1. Semantic Cache Check (skip if requested)
+    if not input_data.skip_cache:
+        cached_answer = await semantic_cache.search(input_data.message)
+        if cached_answer:
+            # Return as a simple stream for consistency
+            async def mock_stream():
+                yield cached_answer
+            return StreamingResponse(mock_stream(), media_type="text/plain")
 
     # 2. Retrieve conversation context from Milvus
     conversation_context = await conversation_memory.retrieve_relevant_context(

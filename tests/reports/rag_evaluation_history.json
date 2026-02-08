@@ -1,0 +1,332 @@
+[
+  {
+    "timestamp": "2026-02-08T16:37:46.582855",
+    "total_questions": 10,
+    "results": [
+      {
+        "question": "What is your Python experience?",
+        "ground_truth": "I have 5+ years of Python experience, primarily working with FastAPI and Django for web development, and extensive data processing work.",
+        "rag_answer": "I have advanced experience in Python, utilizing it extensively for various data science and machine learning projects. My proficiency includes working with libraries such as PyTorch, TensorFlow, Scikit-learn, Pandas, and NumPy. I have implemented regression and clustering algorithms, performed data preprocessing, and developed automation pipelines using Dataiku. Additionally, I have deployed Python code as APIs within Dataiku\u2019s API Node to support scalable operations. My experience spans over a decade, during which I have applied Python in diverse roles, including as a Software Architect and Technical Lead.",
+        "match": "OK"
+      },
+      {
+        "question": "What databases do you know?",
+        "ground_truth": "I have experience with Milvus vector database for semantic search and embeddings storage in my RAG chatbot project.",
+        "rag_answer": "I have experience with several databases, particularly in the context of vector databases. My primary expertise lies in Milvus, where I have a solid understanding of its multi-tenancy architecture and various supported indexes like HNSW, IVF, PQ, and Flat for efficient Approximate Nearest Neighbor (ANN) search. Additionally, I have built expertise in Pinecone, PGVector, and MongoAtlas. My work often involves designing collections and defining schemas with vector and scalar fields to ensure optimal structure and search performance.",
+        "match": "OK"
+      },
+      {
+        "question": "Do you have React experience?",
+        "ground_truth": "I don't have React experience in my portfolio.",
+        "rag_answer": "Yes, I have extensive experience with React. Currently, I am working as a Front-End Technical Architect for a large restaurant chain, where I led the migration strategy to React along with Redux and Webpack. This initiative improved the maintainability of our codebase and enhanced our release cadence. Additionally, I have utilized React in various projects, focusing on building scalable UI systems and ensuring high performance.",
+        "match": "OK"
+      },
+      {
+        "question": "What Python projects have you built and how did you deploy them?",
+        "ground_truth": "I built Ragume, a RAG chatbot using FastAPI and LangChain, deployed on Render with automated deployment. The project includes conversation memory, semantic caching, and streaming responses.",
+        "rag_answer": "I have built several Python projects, primarily focusing on machine learning and data processing. For instance, I utilized libraries such as PyTorch, Scikit-learn, Pandas, NumPy, and Matplotlib to develop models and analyze data. \n\nOne notable project involved creating a Conversational Insights platform, where I architected and deployed a scalable, cloud-native infrastructure. I used Azure and GCP for deployment, ensuring high availability and secure multi-tenant isolation. \n\nFor deployment, I designed independent CI/CD pipelines in Azure DevOps, which facilitated autonomous deployments across various environments, including Dev, QA, Canary, and Production. This approach improved release quality and collaboration among teams. Additionally, I employed Dataiku for preprocessing, model deployment, and experiment tracking, which streamlined the workflow and enhanced the overall efficiency of the project. \n\nOverall, my projects emphasize modularity, scalability, and a strong focus on user experience and security.",
+        "match": "OK"
+      },
+      {
+        "question": "Tell me about your experience with APIs and FastAPI",
+        "ground_truth": "I have extensive FastAPI experience, building production APIs including the Ragume chatbot backend with streaming responses, rate limiting, and integration with OpenAI and Milvus. I've implemented RESTful endpoints, async operations, and proper error handling.",
+        "rag_answer": "I have extensive experience in API design and development, particularly with Node.js and Java Spring Boot. I focus on creating scalable and efficient APIs that support various applications, including AI-powered systems. However, I don't have specific experience with FastAPI, as it is not mentioned in my portfolio context. If you have questions about my work with other API frameworks or technologies, feel free to ask!",
+        "match": "OK"
+      },
+      {
+        "question": "How did you implement conversation memory in your chatbot?",
+        "ground_truth": "I implemented conversation memory using LLM-based summarization that creates summaries every 2 exchanges (4 messages). These summaries are stored as vector embeddings in Milvus and retrieved semantically based on the current question. The system uses localStorage for session management with a 24-hour TTL.",
+        "rag_answer": "I implemented conversation memory in my chatbot by developing a dedicated conversation history backend. This backend is designed to persist context, attachments, and response lineage throughout the interaction. By maintaining this memory, the chatbot can recall previous exchanges, which allows it to provide more relevant and context-aware responses. This approach enhances the user experience by enabling multi-step reasoning and ensuring that users can engage in more natural and fluid conversations without losing track of the context.",
+        "match": "OK"
+      },
+      {
+        "question": "What vector database did you use and why?",
+        "ground_truth": "I used Milvus as the vector database because it provides efficient semantic search capabilities, supports serverless deployment, and integrates well with LangChain. It stores embeddings for portfolio data, conversation summaries, and semantic cache.",
+        "rag_answer": "I used Milvus VectorDB for my projects because it allows for efficient management of vector data and supports advanced similarity search capabilities. Milvus is particularly well-suited for handling large datasets and enables context-driven vector searches, which align with the OSDU data governance principles. My work involved designing and implementing enhanced similarity search by incorporating complex relationship metadata from OSDU, ensuring accurate and relevant search results. Additionally, I utilized Milvus-supported indexes like HNSW, IVF, PQ, and Flat to optimize Approximate Nearest Neighbor (ANN) search and metadata filtering.",
+        "match": "OK"
+      },
+      {
+        "question": "How does your semantic cache work?",
+        "ground_truth": "The semantic cache stores responses as vector embeddings in Milvus. When a new question comes in, it searches for semantically similar questions (threshold: 0.75) and returns the cached answer if found, reducing latency and API costs by ~40%.",
+        "rag_answer": "I don't have specific information about how my semantic cache works. However, I can share that my work involves implementing semantic similarity search and enhancing schema retrieval processes, which likely contribute to the overall efficiency and performance of data retrieval systems. If you have more specific questions or need details about related projects, feel free to ask!",
+        "match": "OK"
+      },
+      {
+        "question": "What is your experience with machine learning?",
+        "ground_truth": "I don't have specific machine learning experience in my portfolio, though I work with ML models through APIs like OpenAI for the RAG chatbot.",
+        "rag_answer": "I have extensive experience in machine learning, particularly in applying various algorithms and techniques to develop intelligent systems. My expertise includes:\n\n- Proficient use of regression algorithms such as Linear, Polynomial, Decision Tree, and Random Forest, as well as clustering algorithms like K-Means and Hierarchical clustering.\n- A strong grasp of model evaluation metrics and hyperparameter tuning to optimize model performance.\n- Practical understanding of Generative AI paradigms, including Retrieval-Augmented Generation (RAG), prompt engineering, and few-shot learning.\n- Advanced skills in Python and libraries such as TensorFlow, PyTorch, and Scikit-learn, which I use to implement machine learning models effectively.\n\nAdditionally, I focus on integrating traditional machine learning with modern Transformer-based reasoning to enhance semantic retrieval and contextual understanding in enterprise-scale AI solutions.",
+        "match": "OK"
+      },
+      {
+        "question": "Tell me about your mobile app development experience",
+        "ground_truth": "I don't have mobile app development experience in my portfolio.",
+        "rag_answer": "I have significant experience in mobile app development, particularly using PhoneGap, where I acted as the Lead Developer and UI Architect for complex Single Page Applications. My role involved providing solutions for AngularJS and BackboneJS applications, which are often integral to mobile app development.\n\nAdditionally, during my time at Accenture, I worked on web and mobile applications using Flex, HTML5, and JavaScript, which further enhanced my skills in creating responsive and user-friendly mobile experiences. My focus has always been on delivering scalable and high-quality applications that meet user needs and business objectives. \n\nIf you have any specific questions about my projects or technologies used, feel free to ask!",
+        "match": "OK"
+      }
+    ]
+  },
+  {
+    "timestamp": "2026-02-08T16:37:46.582855",
+    "total_questions": 10,
+    "results": [
+      {
+        "question": "What is your Python experience?",
+        "ground_truth": "I have 5+ years of Python experience, primarily working with FastAPI and Django for web development, and extensive data processing work.",
+        "rag_answer": "I have advanced experience in Python, utilizing it extensively for various data science and machine learning projects. My proficiency includes working with libraries such as PyTorch, TensorFlow, Scikit-learn, Pandas, and NumPy. I have implemented regression and clustering algorithms, performed data preprocessing, and developed automation pipelines using Dataiku. Additionally, I have deployed Python code as APIs within Dataiku\u2019s API Node to support scalable operations. My experience spans over a decade, during which I have applied Python in diverse roles, including as a Software Architect and Technical Lead.",
+        "match": "OK"
+      },
+      {
+        "question": "What databases do you know?",
+        "ground_truth": "I have experience with Milvus vector database for semantic search and embeddings storage in my RAG chatbot project.",
+        "rag_answer": "I have experience with several databases, particularly in the context of vector databases. My primary expertise lies in Milvus, where I have a solid understanding of its multi-tenancy architecture and various supported indexes like HNSW, IVF, PQ, and Flat for efficient Approximate Nearest Neighbor (ANN) search. Additionally, I have built expertise in Pinecone, PGVector, and MongoAtlas. My work often involves designing collections and defining schemas with vector and scalar fields to ensure optimal structure and search performance.",
+        "match": "OK"
+      },
+      {
+        "question": "Do you have React experience?",
+        "ground_truth": "I don't have React experience in my portfolio.",
+        "rag_answer": "Yes, I have extensive experience with React. Currently, I am working as a Front-End Technical Architect for a large restaurant chain, where I led the migration strategy to React along with Redux and Webpack. This initiative improved the maintainability of our codebase and enhanced our release cadence. Additionally, I have utilized React in various projects, focusing on building scalable UI systems and ensuring high performance.",
+        "match": "OK"
+      },
+      {
+        "question": "What Python projects have you built and how did you deploy them?",
+        "ground_truth": "I built Ragume, a RAG chatbot using FastAPI and LangChain, deployed on Render with automated deployment. The project includes conversation memory, semantic caching, and streaming responses.",
+        "rag_answer": "I have built several Python projects, primarily focusing on machine learning and data processing. For instance, I utilized libraries such as PyTorch, Scikit-learn, Pandas, NumPy, and Matplotlib to develop models and analyze data. \n\nOne notable project involved creating a Conversational Insights platform, where I architected and deployed a scalable, cloud-native infrastructure. I used Azure and GCP for deployment, ensuring high availability and secure multi-tenant isolation. \n\nFor deployment, I designed independent CI/CD pipelines in Azure DevOps, which facilitated autonomous deployments across various environments, including Dev, QA, Canary, and Production. This approach improved release quality and collaboration among teams. Additionally, I employed Dataiku for preprocessing, model deployment, and experiment tracking, which streamlined the workflow and enhanced the overall efficiency of the project. \n\nOverall, my projects emphasize modularity, scalability, and a strong focus on user experience and security.",
+        "match": "OK"
+      },
+      {
+        "question": "Tell me about your experience with APIs and FastAPI",
+        "ground_truth": "I have extensive FastAPI experience, building production APIs including the Ragume chatbot backend with streaming responses, rate limiting, and integration with OpenAI and Milvus. I've implemented RESTful endpoints, async operations, and proper error handling.",
+        "rag_answer": "I have extensive experience in API design and development, particularly with Node.js and Java Spring Boot. I focus on creating scalable and efficient APIs that support various applications, including AI-powered systems. However, I don't have specific experience with FastAPI, as it is not mentioned in my portfolio context. If you have questions about my work with other API frameworks or technologies, feel free to ask!",
+        "match": "OK"
+      },
+      {
+        "question": "How did you implement conversation memory in your chatbot?",
+        "ground_truth": "I implemented conversation memory using LLM-based summarization that creates summaries every 2 exchanges (4 messages). These summaries are stored as vector embeddings in Milvus and retrieved semantically based on the current question. The system uses localStorage for session management with a 24-hour TTL.",
+        "rag_answer": "I implemented conversation memory in my chatbot by developing a dedicated conversation history backend. This backend is designed to persist context, attachments, and response lineage throughout the interaction. By maintaining this memory, the chatbot can recall previous exchanges, which allows it to provide more relevant and context-aware responses. This approach enhances the user experience by enabling multi-step reasoning and ensuring that users can engage in more natural and fluid conversations without losing track of the context.",
+        "match": "OK"
+      },
+      {
+        "question": "What vector database did you use and why?",
+        "ground_truth": "I used Milvus as the vector database because it provides efficient semantic search capabilities, supports serverless deployment, and integrates well with LangChain. It stores embeddings for portfolio data, conversation summaries, and semantic cache.",
+        "rag_answer": "I used Milvus VectorDB for my projects because it allows for efficient management of vector data and supports advanced similarity search capabilities. Milvus is particularly well-suited for handling large datasets and enables context-driven vector searches, which align with the OSDU data governance principles. My work involved designing and implementing enhanced similarity search by incorporating complex relationship metadata from OSDU, ensuring accurate and relevant search results. Additionally, I utilized Milvus-supported indexes like HNSW, IVF, PQ, and Flat to optimize Approximate Nearest Neighbor (ANN) search and metadata filtering.",
+        "match": "OK"
+      },
+      {
+        "question": "How does your semantic cache work?",
+        "ground_truth": "The semantic cache stores responses as vector embeddings in Milvus. When a new question comes in, it searches for semantically similar questions (threshold: 0.75) and returns the cached answer if found, reducing latency and API costs by ~40%.",
+        "rag_answer": "I don't have specific information about how my semantic cache works. However, I can share that my work involves implementing semantic similarity search and enhancing schema retrieval processes, which likely contribute to the overall efficiency and performance of data retrieval systems. If you have more specific questions or need details about related projects, feel free to ask!",
+        "match": "OK"
+      },
+      {
+        "question": "What is your experience with machine learning?",
+        "ground_truth": "I don't have specific machine learning experience in my portfolio, though I work with ML models through APIs like OpenAI for the RAG chatbot.",
+        "rag_answer": "I have extensive experience in machine learning, particularly in applying various algorithms and techniques to develop intelligent systems. My expertise includes:\n\n- Proficient use of regression algorithms such as Linear, Polynomial, Decision Tree, and Random Forest, as well as clustering algorithms like K-Means and Hierarchical clustering.\n- A strong grasp of model evaluation metrics and hyperparameter tuning to optimize model performance.\n- Practical understanding of Generative AI paradigms, including Retrieval-Augmented Generation (RAG), prompt engineering, and few-shot learning.\n- Advanced skills in Python and libraries such as TensorFlow, PyTorch, and Scikit-learn, which I use to implement machine learning models effectively.\n\nAdditionally, I focus on integrating traditional machine learning with modern Transformer-based reasoning to enhance semantic retrieval and contextual understanding in enterprise-scale AI solutions.",
+        "match": "OK"
+      },
+      {
+        "question": "Tell me about your mobile app development experience",
+        "ground_truth": "I don't have mobile app development experience in my portfolio.",
+        "rag_answer": "I have significant experience in mobile app development, particularly using PhoneGap, where I acted as the Lead Developer and UI Architect for complex Single Page Applications. My role involved providing solutions for AngularJS and BackboneJS applications, which are often integral to mobile app development.\n\nAdditionally, during my time at Accenture, I worked on web and mobile applications using Flex, HTML5, and JavaScript, which further enhanced my skills in creating responsive and user-friendly mobile experiences. My focus has always been on delivering scalable and high-quality applications that meet user needs and business objectives. \n\nIf you have any specific questions about my projects or technologies used, feel free to ask!",
+        "match": "OK"
+      }
+    ]
+  },
+  {
+    "timestamp": "2026-02-08T16:37:46.582855",
+    "total_questions": 10,
+    "results": [
+      {
+        "question": "What is your Python experience?",
+        "ground_truth": "I have 5+ years of Python experience, primarily working with FastAPI and Django for web development, and extensive data processing work.",
+        "rag_answer": "I have advanced experience in Python, utilizing it extensively for various data science and machine learning projects. My proficiency includes working with libraries such as PyTorch, TensorFlow, Scikit-learn, Pandas, and NumPy. I have implemented regression and clustering algorithms, performed data preprocessing, and developed automation pipelines using Dataiku. Additionally, I have deployed Python code as APIs within Dataiku\u2019s API Node to support scalable operations. My experience spans over a decade, during which I have applied Python in diverse roles, including as a Software Architect and Technical Lead.",
+        "match": "OK"
+      },
+      {
+        "question": "What databases do you know?",
+        "ground_truth": "I have experience with Milvus vector database for semantic search and embeddings storage in my RAG chatbot project.",
+        "rag_answer": "I have experience with several databases, particularly in the context of vector databases. My primary expertise lies in Milvus, where I have a solid understanding of its multi-tenancy architecture and various supported indexes like HNSW, IVF, PQ, and Flat for efficient Approximate Nearest Neighbor (ANN) search. Additionally, I have built expertise in Pinecone, PGVector, and MongoAtlas. My work often involves designing collections and defining schemas with vector and scalar fields to ensure optimal structure and search performance.",
+        "match": "OK"
+      },
+      {
+        "question": "Do you have React experience?",
+        "ground_truth": "I don't have React experience in my portfolio.",
+        "rag_answer": "Yes, I have extensive experience with React. Currently, I am working as a Front-End Technical Architect for a large restaurant chain, where I led the migration strategy to React along with Redux and Webpack. This initiative improved the maintainability of our codebase and enhanced our release cadence. Additionally, I have utilized React in various projects, focusing on building scalable UI systems and ensuring high performance.",
+        "match": "OK"
+      },
+      {
+        "question": "What Python projects have you built and how did you deploy them?",
+        "ground_truth": "I built Ragume, a RAG chatbot using FastAPI and LangChain, deployed on Render with automated deployment. The project includes conversation memory, semantic caching, and streaming responses.",
+        "rag_answer": "I have built several Python projects, primarily focusing on machine learning and data processing. For instance, I utilized libraries such as PyTorch, Scikit-learn, Pandas, NumPy, and Matplotlib to develop models and analyze data. \n\nOne notable project involved creating a Conversational Insights platform, where I architected and deployed a scalable, cloud-native infrastructure. I used Azure and GCP for deployment, ensuring high availability and secure multi-tenant isolation. \n\nFor deployment, I designed independent CI/CD pipelines in Azure DevOps, which facilitated autonomous deployments across various environments, including Dev, QA, Canary, and Production. This approach improved release quality and collaboration among teams. Additionally, I employed Dataiku for preprocessing, model deployment, and experiment tracking, which streamlined the workflow and enhanced the overall efficiency of the project. \n\nOverall, my projects emphasize modularity, scalability, and a strong focus on user experience and security.",
+        "match": "OK"
+      },
+      {
+        "question": "Tell me about your experience with APIs and FastAPI",
+        "ground_truth": "I have extensive FastAPI experience, building production APIs including the Ragume chatbot backend with streaming responses, rate limiting, and integration with OpenAI and Milvus. I've implemented RESTful endpoints, async operations, and proper error handling.",
+        "rag_answer": "I have extensive experience in API design and development, particularly with Node.js and Java Spring Boot. I focus on creating scalable and efficient APIs that support various applications, including AI-powered systems. However, I don't have specific experience with FastAPI, as it is not mentioned in my portfolio context. If you have questions about my work with other API frameworks or technologies, feel free to ask!",
+        "match": "OK"
+      },
+      {
+        "question": "How did you implement conversation memory in your chatbot?",
+        "ground_truth": "I implemented conversation memory using LLM-based summarization that creates summaries every 2 exchanges (4 messages). These summaries are stored as vector embeddings in Milvus and retrieved semantically based on the current question. The system uses localStorage for session management with a 24-hour TTL.",
+        "rag_answer": "I implemented conversation memory in my chatbot by developing a dedicated conversation history backend. This backend is designed to persist context, attachments, and response lineage throughout the interaction. By maintaining this memory, the chatbot can recall previous exchanges, which allows it to provide more relevant and context-aware responses. This approach enhances the user experience by enabling multi-step reasoning and ensuring that users can engage in more natural and fluid conversations without losing track of the context.",
+        "match": "OK"
+      },
+      {
+        "question": "What vector database did you use and why?",
+        "ground_truth": "I used Milvus as the vector database because it provides efficient semantic search capabilities, supports serverless deployment, and integrates well with LangChain. It stores embeddings for portfolio data, conversation summaries, and semantic cache.",
+        "rag_answer": "I used Milvus VectorDB for my projects because it allows for efficient management of vector data and supports advanced similarity search capabilities. Milvus is particularly well-suited for handling large datasets and enables context-driven vector searches, which align with the OSDU data governance principles. My work involved designing and implementing enhanced similarity search by incorporating complex relationship metadata from OSDU, ensuring accurate and relevant search results. Additionally, I utilized Milvus-supported indexes like HNSW, IVF, PQ, and Flat to optimize Approximate Nearest Neighbor (ANN) search and metadata filtering.",
+        "match": "OK"
+      },
+      {
+        "question": "How does your semantic cache work?",
+        "ground_truth": "The semantic cache stores responses as vector embeddings in Milvus. When a new question comes in, it searches for semantically similar questions (threshold: 0.75) and returns the cached answer if found, reducing latency and API costs by ~40%.",
+        "rag_answer": "I don't have specific information about how my semantic cache works. However, I can share that my work involves implementing semantic similarity search and enhancing schema retrieval processes, which likely contribute to the overall efficiency and performance of data retrieval systems. If you have more specific questions or need details about related projects, feel free to ask!",
+        "match": "OK"
+      },
+      {
+        "question": "What is your experience with machine learning?",
+        "ground_truth": "I don't have specific machine learning experience in my portfolio, though I work with ML models through APIs like OpenAI for the RAG chatbot.",
+        "rag_answer": "I have extensive experience in machine learning, particularly in applying various algorithms and techniques to develop intelligent systems. My expertise includes:\n\n- Proficient use of regression algorithms such as Linear, Polynomial, Decision Tree, and Random Forest, as well as clustering algorithms like K-Means and Hierarchical clustering.\n- A strong grasp of model evaluation metrics and hyperparameter tuning to optimize model performance.\n- Practical understanding of Generative AI paradigms, including Retrieval-Augmented Generation (RAG), prompt engineering, and few-shot learning.\n- Advanced skills in Python and libraries such as TensorFlow, PyTorch, and Scikit-learn, which I use to implement machine learning models effectively.\n\nAdditionally, I focus on integrating traditional machine learning with modern Transformer-based reasoning to enhance semantic retrieval and contextual understanding in enterprise-scale AI solutions.",
+        "match": "OK"
+      },
+      {
+        "question": "Tell me about your mobile app development experience",
+        "ground_truth": "I don't have mobile app development experience in my portfolio.",
+        "rag_answer": "I have significant experience in mobile app development, particularly using PhoneGap, where I acted as the Lead Developer and UI Architect for complex Single Page Applications. My role involved providing solutions for AngularJS and BackboneJS applications, which are often integral to mobile app development.\n\nAdditionally, during my time at Accenture, I worked on web and mobile applications using Flex, HTML5, and JavaScript, which further enhanced my skills in creating responsive and user-friendly mobile experiences. My focus has always been on delivering scalable and high-quality applications that meet user needs and business objectives. \n\nIf you have any specific questions about my projects or technologies used, feel free to ask!",
+        "match": "OK"
+      }
+    ]
+  },
+  {
+    "timestamp": "2026-02-08T16:37:46.582855",
+    "total_questions": 10,
+    "results": [
+      {
+        "question": "What is your Python experience?",
+        "ground_truth": "I have 5+ years of Python experience, primarily working with FastAPI and Django for web development, and extensive data processing work.",
+        "rag_answer": "I have advanced experience in Python, utilizing it extensively for various data science and machine learning projects. My proficiency includes working with libraries such as PyTorch, TensorFlow, Scikit-learn, Pandas, and NumPy. I have implemented regression and clustering algorithms, performed data preprocessing, and developed automation pipelines using Dataiku. Additionally, I have deployed Python code as APIs within Dataiku\u2019s API Node to support scalable operations. My experience spans over a decade, during which I have applied Python in diverse roles, including as a Software Architect and Technical Lead.",
+        "match": "OK"
+      },
+      {
+        "question": "What databases do you know?",
+        "ground_truth": "I have experience with Milvus vector database for semantic search and embeddings storage in my RAG chatbot project.",
+        "rag_answer": "I have experience with several databases, particularly in the context of vector databases. My primary expertise lies in Milvus, where I have a solid understanding of its multi-tenancy architecture and various supported indexes like HNSW, IVF, PQ, and Flat for efficient Approximate Nearest Neighbor (ANN) search. Additionally, I have built expertise in Pinecone, PGVector, and MongoAtlas. My work often involves designing collections and defining schemas with vector and scalar fields to ensure optimal structure and search performance.",
+        "match": "OK"
+      },
+      {
+        "question": "Do you have React experience?",
+        "ground_truth": "I don't have React experience in my portfolio.",
+        "rag_answer": "Yes, I have extensive experience with React. Currently, I am working as a Front-End Technical Architect for a large restaurant chain, where I led the migration strategy to React along with Redux and Webpack. This initiative improved the maintainability of our codebase and enhanced our release cadence. Additionally, I have utilized React in various projects, focusing on building scalable UI systems and ensuring high performance.",
+        "match": "OK"
+      },
+      {
+        "question": "What Python projects have you built and how did you deploy them?",
+        "ground_truth": "I built Ragume, a RAG chatbot using FastAPI and LangChain, deployed on Render with automated deployment. The project includes conversation memory, semantic caching, and streaming responses.",
+        "rag_answer": "I have built several Python projects, primarily focusing on machine learning and data processing. For instance, I utilized libraries such as PyTorch, Scikit-learn, Pandas, NumPy, and Matplotlib to develop models and analyze data. \n\nOne notable project involved creating a Conversational Insights platform, where I architected and deployed a scalable, cloud-native infrastructure. I used Azure and GCP for deployment, ensuring high availability and secure multi-tenant isolation. \n\nFor deployment, I designed independent CI/CD pipelines in Azure DevOps, which facilitated autonomous deployments across various environments, including Dev, QA, Canary, and Production. This approach improved release quality and collaboration among teams. Additionally, I employed Dataiku for preprocessing, model deployment, and experiment tracking, which streamlined the workflow and enhanced the overall efficiency of the project. \n\nOverall, my projects emphasize modularity, scalability, and a strong focus on user experience and security.",
+        "match": "OK"
+      },
+      {
+        "question": "Tell me about your experience with APIs and FastAPI",
+        "ground_truth": "I have extensive FastAPI experience, building production APIs including the Ragume chatbot backend with streaming responses, rate limiting, and integration with OpenAI and Milvus. I've implemented RESTful endpoints, async operations, and proper error handling.",
+        "rag_answer": "I have extensive experience in API design and development, particularly with Node.js and Java Spring Boot. I focus on creating scalable and efficient APIs that support various applications, including AI-powered systems. However, I don't have specific experience with FastAPI, as it is not mentioned in my portfolio context. If you have questions about my work with other API frameworks or technologies, feel free to ask!",
+        "match": "OK"
+      },
+      {
+        "question": "How did you implement conversation memory in your chatbot?",
+        "ground_truth": "I implemented conversation memory using LLM-based summarization that creates summaries every 2 exchanges (4 messages). These summaries are stored as vector embeddings in Milvus and retrieved semantically based on the current question. The system uses localStorage for session management with a 24-hour TTL.",
+        "rag_answer": "I implemented conversation memory in my chatbot by developing a dedicated conversation history backend. This backend is designed to persist context, attachments, and response lineage throughout the interaction. By maintaining this memory, the chatbot can recall previous exchanges, which allows it to provide more relevant and context-aware responses. This approach enhances the user experience by enabling multi-step reasoning and ensuring that users can engage in more natural and fluid conversations without losing track of the context.",
+        "match": "OK"
+      },
+      {
+        "question": "What vector database did you use and why?",
+        "ground_truth": "I used Milvus as the vector database because it provides efficient semantic search capabilities, supports serverless deployment, and integrates well with LangChain. It stores embeddings for portfolio data, conversation summaries, and semantic cache.",
+        "rag_answer": "I used Milvus VectorDB for my projects because it allows for efficient management of vector data and supports advanced similarity search capabilities. Milvus is particularly well-suited for handling large datasets and enables context-driven vector searches, which align with the OSDU data governance principles. My work involved designing and implementing enhanced similarity search by incorporating complex relationship metadata from OSDU, ensuring accurate and relevant search results. Additionally, I utilized Milvus-supported indexes like HNSW, IVF, PQ, and Flat to optimize Approximate Nearest Neighbor (ANN) search and metadata filtering.",
+        "match": "OK"
+      },
+      {
+        "question": "How does your semantic cache work?",
+        "ground_truth": "The semantic cache stores responses as vector embeddings in Milvus. When a new question comes in, it searches for semantically similar questions (threshold: 0.75) and returns the cached answer if found, reducing latency and API costs by ~40%.",
+        "rag_answer": "I don't have specific information about how my semantic cache works. However, I can share that my work involves implementing semantic similarity search and enhancing schema retrieval processes, which likely contribute to the overall efficiency and performance of data retrieval systems. If you have more specific questions or need details about related projects, feel free to ask!",
+        "match": "OK"
+      },
+      {
+        "question": "What is your experience with machine learning?",
+        "ground_truth": "I don't have specific machine learning experience in my portfolio, though I work with ML models through APIs like OpenAI for the RAG chatbot.",
+        "rag_answer": "I have extensive experience in machine learning, particularly in applying various algorithms and techniques to develop intelligent systems. My expertise includes:\n\n- Proficient use of regression algorithms such as Linear, Polynomial, Decision Tree, and Random Forest, as well as clustering algorithms like K-Means and Hierarchical clustering.\n- A strong grasp of model evaluation metrics and hyperparameter tuning to optimize model performance.\n- Practical understanding of Generative AI paradigms, including Retrieval-Augmented Generation (RAG), prompt engineering, and few-shot learning.\n- Advanced skills in Python and libraries such as TensorFlow, PyTorch, and Scikit-learn, which I use to implement machine learning models effectively.\n\nAdditionally, I focus on integrating traditional machine learning with modern Transformer-based reasoning to enhance semantic retrieval and contextual understanding in enterprise-scale AI solutions.",
+        "match": "OK"
+      },
+      {
+        "question": "Tell me about your mobile app development experience",
+        "ground_truth": "I don't have mobile app development experience in my portfolio.",
+        "rag_answer": "I have significant experience in mobile app development, particularly using PhoneGap, where I acted as the Lead Developer and UI Architect for complex Single Page Applications. My role involved providing solutions for AngularJS and BackboneJS applications, which are often integral to mobile app development.\n\nAdditionally, during my time at Accenture, I worked on web and mobile applications using Flex, HTML5, and JavaScript, which further enhanced my skills in creating responsive and user-friendly mobile experiences. My focus has always been on delivering scalable and high-quality applications that meet user needs and business objectives. \n\nIf you have any specific questions about my projects or technologies used, feel free to ask!",
+        "match": "OK"
+      }
+    ]
+  },
+  {
+    "timestamp": "2026-02-08T16:48:58.985484",
+    "total_questions": 10,
+    "results": [
+      {
+        "question": "What is your Python experience?",
+        "ground_truth": "I have over 5 years of Python experience, specializing in FastAPI and Django for web development.",
+        "rag_answer": "I have advanced experience in Python, utilizing it extensively for data science projects, model deployment, and automation pipelines, particularly within Dataiku.",
+        "match": "OK"
+      },
+      {
+        "question": "What databases do you know?",
+        "ground_truth": "I primarily use Milvus for vector storage and semantic search in my RAG chatbot projects.",
+        "rag_answer": "I have experience with Milvus, Pinecone, PGVector, and MongoAtlas.",
+        "match": "OK"
+      },
+      {
+        "question": "Do you have React experience?",
+        "ground_truth": "No, I don't have React experience listed in my portfolio.",
+        "rag_answer": "Yes, I have extensive experience with React, particularly as a Front-End Technical Architect where I led the migration strategy to Redux + Webpack, improving maintainability and release cadence.",
+        "match": "OK"
+      },
+      {
+        "question": "What Python projects have you built and how did you deploy them?",
+        "ground_truth": "I built Ragume, a RAG chatbot using FastAPI and LangChain, which I deployed on Render.",
+        "rag_answer": "I have built several Python projects utilizing frameworks like PyTorch, Scikit-learn, and Pandas for data processing and machine learning. I deployed these projects using CI/CD pipelines in Azure DevOps, ensuring smooth transitions across development, QA, and production environments.",
+        "match": "OK"
+      },
+      {
+        "question": "Tell me about your experience with APIs and FastAPI",
+        "ground_truth": "I have extensive experience with APIs and FastAPI, including building the production backend for my Ragume chatbot.",
+        "rag_answer": "I have experience in API design and development, particularly with Node.js and Java Spring Boot. However, I don't have specific information about my experience with FastAPI.",
+        "match": "OK"
+      },
+      {
+        "question": "How did you implement conversation memory in your chatbot?",
+        "ground_truth": "I implemented conversation memory using semantic retrieval of lesson summaries stored in Milvus.",
+        "rag_answer": "I developed a dedicated conversation history backend to persist context, attachments, and response lineage, which allows the chatbot to maintain conversational context and support multi-step reasoning effectively.",
+        "match": "OK"
+      },
+      {
+        "question": "What vector database did you use and why?",
+        "ground_truth": "I use Milvus as my vector database for its efficient semantic search and seamless integration with LangChain.",
+        "rag_answer": "I used Milvus VectorDB because it allows for consistent, compliant, and context-driven vector searches while aligning with OSDU data governance principles. Its capabilities in managing vector data and supporting efficient Approximate Nearest Neighbor (ANN) search were crucial for my projects.",
+        "match": "OK"
+      },
+      {
+        "question": "How does your semantic cache work?",
+        "ground_truth": "My semantic cache uses Milvus to store and retrieve previously generated answers based on query similarity.",
+        "rag_answer": "I don't have information on how my semantic cache works.",
+        "match": "OK"
+      },
+      {
+        "question": "What is your experience with machine learning?",
+        "ground_truth": "I don't have direct machine learning experience, though I utilize LLMs through APIs for my RAG projects.",
+        "rag_answer": "I have experience in various machine learning algorithms, including regression (like linear and decision trees) and clustering (such as K-means). I also focus on model evaluation metrics and hyperparameter tuning to optimize performance.",
+        "match": "OK"
+      },
+      {
+        "question": "Tell me about your mobile app development experience",
+        "ground_truth": "I do not have mobile app development experience in my portfolio.",
+        "rag_answer": "I have experience in mobile app development using PhoneGap, where I acted as the Lead Developer/UI Architect for complex Single Page Applications. My work involved providing solutions for web and mobile applications, ensuring a seamless user experience.",
+        "match": "OK"
+      }
+    ]
+  }
+]

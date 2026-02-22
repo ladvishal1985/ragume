@@ -680,6 +680,7 @@
                 });
 
                 if (response.ok) {
+                    const isCached = response.headers.get('x-cache-hit') === 'true';
                     const reader = response.body.getReader();
                     const decoder = new TextDecoder();
 
@@ -717,6 +718,10 @@
                             chatMessages.scrollTop = chatMessages.scrollHeight;
                         } else if (isStreamDone) {
                             clearInterval(typeInterval);
+
+                            if (isCached) {
+                                typingDiv.innerHTML = marked.parse(streamBuffer) + '<span class="cache-icon" title="Lightning fast from cache">⚡</span>';
+                            }
 
                             // Add assistant response to recent messages
                             recentMessages.push({ role: "assistant", content: streamBuffer });

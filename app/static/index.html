@@ -689,47 +689,59 @@
                     let isStreamDone = false;
                     let hasStartedTyping = false;
 
-                    // 1. Consumer: Process the stream in background
+                    // Consumer & Renderer: Process NDJSON stream
                     (async () => {
+                        let partialChunk = '';
                         while (true) {
                             const { done, value } = await reader.read();
-                            if (done) {
-                                isStreamDone = true;
-                                break;
+                            if (done) break;
+
+                            partialChunk += decoder.decode(value, { stream: true });
+                            let lines = partialChunk.split('\n');
+                            partialChunk = lines.pop(); // Keep the last incomplete line
+
+                            for (const line of lines) {
+                                if (!line.trim()) continue;
+                                try {
+                                    const event = JSON.parse(line);
+
+                                    if (event.type === 'trace') {
+                                        // Look for or create the trace block
+                                        let traceContainer = typingDiv.previousElementSibling;
+                                        if (!traceContainer || !traceContainer.classList.contains('trace-block')) {
+                                            traceContainer = document.createElement('div');
+                                            traceContainer.className = 'trace-block';
+                                            traceContainer.style = 'font-size: 0.8rem; color: #94a3b8; font-family: monospace; padding: 12px; margin-bottom: 12px; background: rgba(0,0,0,0.3); border-radius: 8px; border-left: 3px solid #6366f1; white-space: pre-wrap;';
+                                            chatMessages.insertBefore(traceContainer, typingDiv);
+                                        }
+                                        traceContainer.innerHTML += `<div>${event.content}</div>`;
+                                        chatMessages.scrollTop = chatMessages.scrollHeight;
+                                    }
+                                    else if (event.type === 'content') {
+                                        if (!hasStartedTyping) {
+                                            typingDiv.innerHTML = '';
+                                            hasStartedTyping = true;
+                                        }
+                                        streamBuffer += event.content;
+                                        displayedText = streamBuffer; // For instant render in JSON mode
+                                        typingDiv.innerHTML = marked.parse(streamBuffer);
+                                        chatMessages.scrollTop = chatMessages.scrollHeight;
+                                    }
+                                } catch (e) {
+                                    console.error("JSON parse error:", line);
+                                }
                             }
-                            streamBuffer += decoder.decode(value);
+                        }
+
+                        // Stream Finished
+                        if (isCached) {
+                            typingDiv.innerHTML = marked.parse(streamBuffer) + '<span class="cache-icon" title="Lightning fast from cache">⚡</span>';
+                        }
+                        recentMessages.push({ role: "assistant", content: streamBuffer });
+                        if (recentMessages.length > 4) {
+                            recentMessages = recentMessages.slice(-4);
                         }
                     })();
-
-                    // 2. Renderer: Smooth interval update (20ms)
-                    const typeInterval = setInterval(() => {
-                        if (displayedText.length < streamBuffer.length) {
-                            // Replace typing indicator with actual content on first character
-                            if (!hasStartedTyping) {
-                                typingDiv.innerHTML = '';
-                                hasStartedTyping = true;
-                            }
-
-                            // Add 2 chars per tick for nice speed
-                            const chunk = streamBuffer.slice(displayedText.length, displayedText.length + 2);
-                            displayedText += chunk;
-                            typingDiv.innerHTML = marked.parse(displayedText);
-                            typingDiv.style.animation = 'textReveal 0.2s ease';
-                            chatMessages.scrollTop = chatMessages.scrollHeight;
-                        } else if (isStreamDone) {
-                            clearInterval(typeInterval);
-
-                            if (isCached) {
-                                typingDiv.innerHTML = marked.parse(streamBuffer) + '<span class="cache-icon" title="Lightning fast from cache">⚡</span>';
-                            }
-
-                            // Add assistant response to recent messages
-                            recentMessages.push({ role: "assistant", content: streamBuffer });
-                            if (recentMessages.length > 4) {
-                                recentMessages = recentMessages.slice(-4);
-                            }
-                        }
-                    }, 20);
 
                 } else {
                     typingDiv.remove();

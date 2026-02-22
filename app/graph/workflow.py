@@ -1,15 +1,17 @@
-
 from langgraph.graph import StateGraph, START, END
+from langgraph.prebuilt import ToolNode, tools_condition
 from app.graph.state import State
-from app.graph.nodes import retrieve, generate
+from app.graph.nodes import agent, tools
 
 workflow = StateGraph(State)
 
-workflow.add_node("retrieve", retrieve)
-workflow.add_node("generate", generate)
+tool_node = ToolNode(tools)
 
-workflow.add_edge(START, "retrieve")
-workflow.add_edge("retrieve", "generate")
-workflow.add_edge("generate", END)
+workflow.add_node("agent", agent)
+workflow.add_node("tools", tool_node)
+
+workflow.add_edge(START, "agent")
+workflow.add_conditional_edges("agent", tools_condition)
+workflow.add_edge("tools", "agent")
 
 app_graph = workflow.compile()

@@ -33,7 +33,7 @@ async def run_agent(request: Request, input_data: AgentInput):
             # Return as a simple stream for consistency
             async def mock_stream():
                 yield cached_answer
-            return StreamingResponse(mock_stream(), media_type="text/plain")
+            return StreamingResponse(mock_stream(), media_type="text/plain", headers={"X-Cache-Hit": "true"})
 
     # 2. Retrieve conversation context from Milvus
     conversation_context = await conversation_memory.retrieve_relevant_context(

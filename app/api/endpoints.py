@@ -1,5 +1,6 @@
 
 import os
+import json
 from fastapi import APIRouter, HTTPException, Request
 from fastapi.responses import StreamingResponse
 from langchain_community.document_loaders import PyPDFLoader
@@ -32,8 +33,8 @@ async def run_agent(request: Request, input_data: AgentInput):
         if cached_answer:
             # Return as a simple stream for consistency
             async def mock_stream():
-                yield cached_answer
-            return StreamingResponse(mock_stream(), media_type="text/plain", headers={"X-Cache-Hit": "true"})
+                yield json.dumps({"type": "content", "content": cached_answer}) + "\n"
+            return StreamingResponse(mock_stream(), media_type="application/x-ndjson", headers={"X-Cache-Hit": "true"})
 
     # 2. Retrieve conversation context from Milvus
     conversation_context = await conversation_memory.retrieve_relevant_context(
@@ -55,18 +56,46 @@ async def run_agent(request: Request, input_data: AgentInput):
         }
         
         try:
-            # Stream tokens from the graph
             async for event in app_graph.astream_events(initial_state, version="v1"):
                 kind = event["event"]
+                name = event.get("name", "")
+                data = event.get("data", {})
                 
+                # --- Advanced Tracing ---
+                if kind == "on_chain_start" and name in ["agent", "tools"]:
+                    print(f"\n[Trace] ➡️ Entering Node: '{name}'")
+                    yield json.dumps({"type": "trace", "content": f"Entering Node: {name}"}) + "\n"
+                    
+                elif kind == "on_tool_start":
+                    inputs = data.get("input", {})
+                    print(f"[Trace] 🛠️ Executing Tool: '{name}' | Inputs: {inputs}")
+                    yield json.dumps({"type": "trace", "content": f"Executing Tool: {name}"}) + "\n"
+                    
+                elif kind == "on_tool_end":
+                    output = data.get("output", "No output")
+                    # Truncate output if it's too long to avoid console spam
+                    out_str = str(output)
+                    if len(out_str) > 150: out_str = out_str[:150] + "..."
+                    print(f"[Trace] ✅ Tool Finished: '{name}' | Result Snapshot: {out_str}")
+                    yield json.dumps({"type": "trace", "content": f"Tool Finished: {name}"}) + "\n"
+                
+                elif kind == "on_chat_model_end":
+                    # Extract token usage if available
+                    response_obj = data.get("output", {})
+                    if hasattr(response_obj, "usage_metadata") and response_obj.usage_metadata:
+                        usage = response_obj.usage_metadata
+                        print(f"[Trace] 💰 Tokens Used -> Prompt: {usage.get('input_tokens')}, Completion: {usage.get('output_tokens')}, Total: {usage.get('total_tokens')}")
+                        yield json.dumps({"type": "trace", "content": f"Tokens Used: {usage.get('total_tokens')}"}) + "\n"
+                # ------------------------
+                    
                 # Check for LLM stream events
                 if kind == "on_chat_model_stream":
                     content = event["data"]["chunk"].content
                     if content:
                         full_answer += content
-                        yield content
+                        yield json.dumps({"type": "content", "content": content}) + "\n"
                         
-            # 4. Save to Cache (After stream completes)
+            # 3. Save to Cache (After stream completes)
             if full_answer:
                 await semantic_cache.add(input_data.message, full_answer)
                 
@@ -82,7 +111,7 @@ async def run_agent(request: Request, input_data: AgentInput):
             print(f"Streaming error: {e}")
             yield f"Error: {str(e)}"
 
-    return StreamingResponse(event_generator(), media_type="text/plain")
+    return StreamingResponse(event_generator(), media_type="application/x-ndjson")
 
 @router.post("/ingest")
 @limiter.limit("5/minute")

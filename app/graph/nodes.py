@@ -36,8 +36,10 @@ Rules:
     
     messages = state.get("messages", [])
     if not messages:
-        # If no messages exist yet, use the starting question
-        messages = [HumanMessage(content=state.get("question", ""))]
+        question = (state.get("question") or "").strip()
+        if not question:
+            raise ValueError("State must include a non-empty 'question' or initial 'messages'.")
+        messages = [HumanMessage(content=question)]
     
     # Process with LLM
     response = await llm.ainvoke([sys_msg] + messages)
